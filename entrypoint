@@ -1,6 +1,9 @@
 #!/bin/bash
 
+sudo groupadd sftponly
 adduser --disabled-password --gecos "" $SFTP_USER
+sudo usermod -G sftponly -s /bin/false $SFTP_USER
+
 #useradd $SFTP_USER
 #chown root:root /home/$SFTP_USER
 #chmod 755 /home/$SFTP_USER
@@ -16,6 +19,33 @@ mkdir -p /mnt/s3/uploads
 s3fs $S3_BUCKET:$S3_KEY /mnt/s3/uploads -o passwd_file=/s3credentials -o allow_other -o uid=$(id -u $SFTP_USER)
 rm -vfr /home/$SFTP_USER
 ln -s /mnt/s3 /home/$SFTP_USER
+
+echo `#UseLogin no
+
+#MaxStartups 10:30:60
+#Banner /etc/issue.net
+
+# Allow client to pass locale environment variables
+AcceptEnv LANG LC_*
+
+Subsystem sftp internal-sftp
+
+# Set this to 'yes' to enable PAM authentication, account processing,
+# and session processing. If this is enabled, PAM authentication will
+# be allowed through the ChallengeResponseAuthentication and
+# PasswordAuthentication.  Depending on your PAM configuration,
+# PAM authentication via ChallengeResponseAuthentication may bypass
+# the setting of "PermitRootLogin without-password".
+# If you just want the PAM account and session checks to run without
+# PAM authentication, then enable this but set PasswordAuthentication
+# and ChallengeResponseAuthentication to 'no'.
+UsePAM yes
+
+Match Group sftponly
+  ChrootDirectory %h
+  ForceCommand internal-sftp
+  AllowTcpForwarding no
+  X11Forwarding no` > /etc/ssh/sshd_config
 
 echo "SFTP user: $SFTP_USER"
 echo "S3 Bucket: $S3_BUCKET"

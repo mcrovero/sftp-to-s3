@@ -1,5 +1,4 @@
 FROM ubuntu:14.04
-MAINTAINER Michele Cantelli <emmekappa@gmail.com>
 
 # SSH username and password
 ENV SFTP_USER=sftp
