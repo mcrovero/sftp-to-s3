@@ -20,7 +20,7 @@ s3fs $S3_BUCKET:$S3_KEY /mnt/s3/uploads -o passwd_file=/s3credentials -o allow_o
 rm -vfr /home/$SFTP_USER
 ln -s /mnt/s3 /home/$SFTP_USER
 
-echo `#UseLogin no
+echo "#UseLogin no
 
 #MaxStartups 10:30:60
 #Banner /etc/issue.net
@@ -35,7 +35,7 @@ Subsystem sftp internal-sftp
 # be allowed through the ChallengeResponseAuthentication and
 # PasswordAuthentication.  Depending on your PAM configuration,
 # PAM authentication via ChallengeResponseAuthentication may bypass
-# the setting of "PermitRootLogin without-password".
+# the setting of \"PermitRootLogin without-password\".
 # If you just want the PAM account and session checks to run without
 # PAM authentication, then enable this but set PasswordAuthentication
 # and ChallengeResponseAuthentication to 'no'.
@@ -45,7 +45,7 @@ Match Group sftponly
   ChrootDirectory %h
   ForceCommand internal-sftp
   AllowTcpForwarding no
-  X11Forwarding no` > /etc/ssh/sshd_config
+  X11Forwarding no" > /etc/ssh/sshd_config
 
 echo "SFTP user: $SFTP_USER"
 echo "S3 Bucket: $S3_BUCKET"
